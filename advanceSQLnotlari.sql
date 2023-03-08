@@ -350,7 +350,114 @@ begin
 end $$;
 
 
+--Task 1 : Film tablosundaki film sayısı 10 dan az ise "Film sayısı az" yazdırın,
+--10 dan çok ise "Film sayısı yeterli" yazdıralım..
+
+select * from film
+
+do $$
+declare
+	sayi integer := 0;
+
+begin
+	select count(*)from film-- 4 beklenen sayi
+	into sayi;--sayi=4
+	
+	if(sayi<10) then 
+	raise notice 'film sayisi az';
+		else 
+			raise notice 'Filmin sayisi yeterli'
+			
+			end if;
+	
+end $$
+
+-- Task 2: user_age isminde integer data türünde bir değişken tanımlayıp default olarak bir değer verelim,
+--If yapısı ile girilen değer 18 den büyük ise Access Granted, küçük ise Access Denied yazdıralım
 
 
+DO $$
+DECLARE
+	user_age integer :=25;
+
+BEGIN
+
+	IF user_age>18 THEN
+		RAISE NOTICE 'Access Granted';
+	END IF;
+	
+	IF user_age<18 THEN
+		RAISE NOTICE 'Acess Denied';
+	END IF;
+	
+END $$;
+
+-- 2.YOL :
+
+do $$
+declare
+	user_age integer := 20;
+begin
+	if(user_age>18) then
+		raise notice 'Access Granted';
+	else
+		raise notice 'Access Denied';
+	end if;
+end $$
 
 
+-- Task 3: a ve b isimli integer türünde 2 değişken tanımlayıp default değerlerini verelim, eğer a nın değeri b den büyükse "a , b den büyüktür" yazalım, tam tersi durum için "b, a dan büyüktür" yazalım, 
+--iki değer birbirine eşit ise " a,  b'ye eşittir" yazalım:
+
+DO $$
+DECLARE
+	a integer := 10;	b integer := 20;
+
+BEGIN
+
+	IF a>b THEN
+		RAISE NOTICE 'a, b den büyüktür';
+	END IF;
+	
+	IF a<b THEN
+		RAISE NOTICE 'b, a dan büyüktür';
+	END IF;
+	
+	IF a=b THEN
+		RAISE NOTICE 'a, b ye eşittir';
+	END IF;
+
+END $$;
+
+-- 2: YOL 
+do $$
+declare
+	a int :=10;
+	b int :=5;
+begin
+	if a>b then
+		raise notice 'a b den büyüktür';
+	elseif a<b then
+		raise notice 'b a dan büyüktür';
+	elseif a=b then
+		raise notice 'a b ye eşittir';
+	end if;
+end$$
+
+
+-- Task 4 : kullaniciYasi isimli bir değişken oluşturup default değerini verin, girilen yaş 18 den büyükse "Oy kullanabilirsiniz", 
+18 den küçük ise "Oy kullanamazsınız" yazısını yazalım.
+
+DO $$
+DECLARE
+	kullaniciYasi integer :=13;
+
+BEGIN
+
+	IF kullaniciYasi>18 THEN
+		RAISE NOTICE 'Oy kullanabilirsiniz';
+		ELSE
+			RAISE NOTICE 'Oy kullanamazsınız';
+	END IF;
+
+END $$ ;
