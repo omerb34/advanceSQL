@@ -161,7 +161,194 @@ begin
 end $$ ;
 
 
-not:
+-- ********** Constant **************** 
+​
+do $$
+declare
+	vat	constant numeric := 0.1;
+	net_price	numeric := 20.5;
+
+begin
+	raise notice 'Satış fiyatı : %' , net_price*(1+vat);
+	-- vat := 0.05; -- constant bir ifadeyi ilk setleme işleminden sonra değer değiştirmeye çalışırsak hata alırız
+
+end $$ ;
+
+-- constant bir ifadeye RT da değer verebilir miyim ???
+
+do $$
+declare
+	start_at constant time := now();
+
+begin
+	raise notice 'bloğun çalışma zamanı : %', start_at;
+
+end $$ ;
+
+
+
+-- //////////////////// Control Structures ///////////////////////
+
+-- ******************** If Statement ****************
+
+-- syntax : 
+/*
+
+	if condition  then
+			statement;
+	end if ;
+	
+*/
+
+-- Task : 1 id li filmi bulalım eğer yoksa ekrana uyarı yazısı verelim
+do $$
+declare
+	istenen_film film%rowtype;
+	istenen_filmId film.id%type := 10;
+
+begin
+	select * from film
+	into istenen_film
+	where id = istenen_filmId;
+	
+	if not found then
+		raise notice 'Girdiğiniz id li film bulunamadı : %', istenen_filmId;
+	end if;
+	
+end $$;
+
+-- ************** IF-THEN-ELSE ****************
+/*
+	IF condition THEN
+			statement;
+	ELSE
+			alternative statement;
+	END IF
+*/
+
+-- Task : 1 idli film varsa title bilgisini yazınız yoksa uyarı yazısını ekrana basınız
+do $$
+declare
+
+	selected_film film%rowtype;
+	input_film_id film.id%type :=10;
+
+begin
+	select * from film
+	into selected_film
+	where id = input_film_id;
+	
+	if not found then
+		raise notice 'Girmiş olduğunuz id li film bulunamadı : %', input_film_id;
+	else
+		raise notice 'Filmin ismi : %', selected_film.title;
+	end if;
+
+end $$;
+
+-- ************** IF-THEN-ELSE ****************
+/*
+    IF condition THEN
+            statement;
+    ELSE
+            alternative statement;
+    END IF
+*/
+-- Task : 1 idli film varsa title bilgisini yazınız yoksa uyarı yazısını ekrana basınız
+do $$
+declare
+    selected_film film%rowtype;
+    input_film_id film.id%type :=10;
+begin
+    select * from film
+    into selected_film
+    where id = input_film_id;
+    
+    if not found then
+        raise notice 'Girmiş olduğunuz id li film bulunamadı : %', input_film_id;
+    else
+        raise notice 'Filmin ismi : %', selected_film.title;
+    end if;
+end $$;
+-- ************* IF-THEN-ELSE-IF ************************
+-- syntax : 
+/*
+    IF condition_1 THEN
+                statement_1;
+        ELSEIF condition_2 THEN
+                statement_2;
+        ELSEIF condition_3 THEN
+                statement_3;
+        ELSE 
+                statement_final;
+    END IF ;
+*/
+/*
+    Task : 1 id li film varsa ; 
+            süresi 50 dakikanın altında ise Short, 
+            50<length<120 ise Medium, 
+            length>120 ise Long yazalım
+*/
+do $$
+declare
+    v_film film%rowtype;
+    len_description varchar(50);
+begin
+    select * from film
+    into v_film  --- v_film.id = 1  / v_film.title ='Kuzuların Sessizliği'
+    where id = 30;
+    
+    if not found then
+        raise notice 'Filim bulunamadı';
+    else
+        if v_film.length > 0 and v_film.length <=50 then
+                len_description='Short';
+            elseif v_film.length>50 and v_film.length<120 then
+                len_description='Medium';
+            elseif v_film.length>120 then
+                len_description='Long';
+            else
+                len_description='Tanımlanamıyor';
+         end if;
+     raise notice ' % filminin süresi : %', v_film.title, len_description;
+     end if;            
+end $$;
+-- ******** Case Statement **************************
+-- syntax : 
+ 
+ /*
+ 
+    CASE search-expression
+     WHEN expression_1 [, expression_2,..] THEN
+        statement
+     [..]
+     [ELSE
+        else-statement]
+     END case;
+ */
+ 
+-- Task : Filmin türüne göre çocuklara uygun olup olmadığını ekrana yazalım
+do $$
+declare
+    uyari varchar(50);
+    tur film.type%type;
+begin
+    select type from film
+    into tur
+    where id = 4;
+    
+    if found then 
+        case tur
+            when 'Korku' then uyari='Çocuklar için uygun değildir';
+            when 'Macera' then uyari='Çocuklar için uygun';
+            when 'Animasyon' then uyari ='Çocuklar için tavsiye edilir';
+            else
+                uyari='Tanımlanamadı';
+        end case;
+        raise notice '%', uyari;
+    end if;
+end $$;
+
 
 
 
