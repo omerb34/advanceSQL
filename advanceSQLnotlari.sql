@@ -461,3 +461,79 @@ BEGIN
 	END IF;
 
 END $$ ;
+
+
+--  ************** LOOP *************************************
+-- syntax 
+LOOP
+    statement;
+END LOOP;
+-- loop u sonlandırmak için loopun içine if yapısını kullanabilirz :
+LOOP
+    statements;
+    IF condition THEN
+        exit; -- loop dan çıkmamı sağlıyor
+    END IF;
+END LOOP;
+-- nested loop 
+<<outher>>
+LOOP
+    statements;
+    <<inner>>
+    LOOP
+        .....
+        exit <<inner>>
+        END LOOP;
+END LOOP;
+-- Task : Fibonacci serisinde, belli bir sıradaki sayıyı ekrana getirelim
+-- Fibonacci Serisi : 1,1,2,3,5,8,13,...
+DO $$
+DECLARE
+    n integer :=40;
+    counter integer :=0;
+    i integer :=0;
+    j integer :=1;
+    fib integer :=0;    
+BEGIN 
+    if(n<1) then
+        fib:=0;
+    end if;
+    loop
+        exit when counter =n;
+        counter := counter +1;
+        select j, (i+j) into i,j;   
+    end loop;
+    fib:=i;
+    raise notice '%', fib;
+    
+END $$;
+-- ************ WHILE LOOP *************************
+syntax : 
+WHILE condition LOOP
+    statements;
+END LOOP;
+-- Task : 1 dan 4 e kadar counter değerlerini ekrana basalım
+DO $$
+DECLARE
+    n integer :=4;
+    counter integer :=0;
+BEGIN
+    WHILE counter<n LOOP
+        counter:=counter+1;
+        raise notice '%', counter;
+    END LOOP;
+END $$;
+-- Cevap 2:
+DO $$
+DECLARE
+    counter integer :=0;
+BEGIN 
+    WHILE counter<4 LOOP
+        counter := counter+1;
+        raise notice '%', counter;
+    END LOOP;   
+END $$ ;
+
+
+
+
