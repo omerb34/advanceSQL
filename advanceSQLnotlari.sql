@@ -535,5 +535,86 @@ BEGIN
 END $$ ;
 
 
+-- Task : sayac isminde bir degisken olusturun ve dongu icinde sayaci birer artirin,  
+her dongude sayacin degerini ekrana basin ve sayac degeri 5 e esit olunca donguden cikin
+
+do $$
+DECLARE
+	counter integer := 0;
+
+BEGIN
+	LOOP
+		RAISE NOTICE '%', counter;
+		counter := counter +1;
+		EXIT WHEN counter =5;
+	END LOOP;
+END $$;
+
+-- **************  FOR LOOP *********************
+-- syntax
+for loop_counter in [reverse] from..to [by step] loop
+	statements;
+end loop ;
+
+
+-- in
+
+do $$
+begin
+	for counter in 1..6 loop
+		raise notice 'counter: %', counter;
+	end loop;	
+
+end $$
+
+
+-- reverse ( Ornek )
+
+
+do $$
+begin
+	for counter in reverse 5..1 loop
+		raise notice 'counter : %', counter;
+	end loop;
+end $$;
+
+
+do $$
+begin
+	for counter in 0..10 by 2 loop
+		raise notice 'counter : %', counter;
+	end loop;	
+end $$;
+
+-- Task : 10 dan 20 ye kadar 2 ser 2 ser ekrana sayilari basalim :
+
+do $$
+begin
+	for counter in 1..10 by 2 loop
+		raise notice 'counter %', counter;
+	end loop;
+end $$;
+
+
+-- Task : olusturulan array'in elemanlarini array seklinde gosterelim :
+
+do $$
+declare
+	array_int int[] := array[11,22,33,44,55,66,77,88];
+	var int[];
+begin
+	for var in select array_int loop
+		raise notice '%', var;
+	end loop;	
+end $$;
+
+
+
+
+
+
+
+
+
 
 
